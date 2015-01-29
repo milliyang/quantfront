@@ -34,15 +34,18 @@ func (this *PerformanceController) Get() {
 		project := quant.DefaultQuant.Projects[num64]
 		oneStrategy, ok := project.MapStrategy[this.baseForm.Strategy+this.baseForm.Stock]
 		if ok {
-			fmt.Println("do project draw", project)
-			fmt.Println("do strategy draw", oneStrategy)
+			//fmt.Println("do project draw", project)
+			fmt.Println("draw strategy:", oneStrategy.Key())
 			rsp.Tables = oneStrategy.DoSvgDrawing()
 			rsp.Strategy = append(rsp.Strategy, oneStrategy)
-			this.Data["json"] = rsp
 		}
+		// for idx, content := range rsp.Tables {
+		// 	this.Ctx.WriteString(content)
+		// 	this.Ctx.WriteString(fmt.Sprintf("table:%d above.\n", idx))
+		// }
 
-		for _, content := range rsp.Tables {
-			this.Ctx.WriteString(content)
-		}
+		this.TplNames = "tables.html"
+		this.Data["Tables"] = rsp.Tables
+
 	}
 }
