@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	_ "github.com/astaxie/beego"
 	"quant"
 	"quant/base/strategy"
@@ -18,8 +17,9 @@ type Respond struct {
 }
 
 // http://localhost:8080/p
-// http://localhost:8080/p?project=0&stragegy=MyStrategy&stock=STO000002
+// http://localhost:8080/p?project=0&strategy=MyStrategy&stock=STO000002
 // http://localhost:8080/p?project=1&strategy=MyStrategy&stock=STO000002
+// http://localhost:8080/p?project=1&strategy=MyStrategy&stock=DICE
 func (this *PerformanceController) Get() {
 
 	rsp := Respond{}
@@ -33,9 +33,9 @@ func (this *PerformanceController) Get() {
 
 		project := quant.DefaultQuant.Projects[num64]
 		oneStrategy, ok := project.MapStrategy[this.baseForm.Strategy+this.baseForm.Stock]
+
 		if ok {
 			//fmt.Println("do project draw", project)
-			fmt.Println("draw strategy:", oneStrategy.Key())
 			rsp.Tables = oneStrategy.DoSvgDrawing()
 			rsp.Strategy = append(rsp.Strategy, oneStrategy)
 		}
